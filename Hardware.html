@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#17253a">
+    <link rel="stylesheet" href="css/Hardware.css">
+    <title>Hardware | Windows 11</title>
+    <link rel="icon" href="img/hardware.png">
+    <style>
+        :root{
+            color-scheme:light;
+            --text:#202124;
+            --muted:#5e6671;--accent:#0067c0;--panel:rgba(246,246,246,.86);--line:rgba(0,0,0,.1)}
+        *{
+            box-sizing:border-box
+        }
+        body{
+            margin:0;
+            min-height:100vh;
+            padding:28px 24px 100px;
+            color:var(--text);
+            font-family:"Segoe UI Variable","Segoe UI",sans-serif;
+            background:linear-gradient(120deg,rgba(18,25,38,.3),rgba(17,35,58,.18)),url("img/windows-11-morado-abstracto.avif") center/cover fixed
+        }
+        a{
+            color:inherit;
+            text-decoration:none}
+        .app{
+            max-width:1180px;
+            margin:0 auto;
+            border:1px solid #ffffffa6;
+            border-radius:22px;
+            overflow:hidden;
+            background:var(--panel);
+            backdrop-filter:blur(30px) saturate(135%);
+            box-shadow:0 24px 80px #06101f40}
+        .titlebar{height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#ffffff80}
+        .brand,.window-actions,.nav,.nav a{display:flex;align-items:center}
+        .brand{gap:10px;font-size:14px;font-weight:600}.brand img{width:24px;height:24px;object-fit:contain}
+        .window-actions{gap:8px;color:#343a40;font-size:13px}.window-actions span{width:30px;height:28px;display:grid;place-items:center;border-radius:7px}
+        .window-actions span:hover{background:#0000000d}.window-actions span:last-child:hover{background:#c42b1c;color:white}
+        .content{padding:clamp(22px,5vw,56px)}
+        .eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+        h1{font-size:clamp(36px,6vw,64px);line-height:1.04;letter-spacing:-.04em;margin:10px 0 14px}
+        h2{font-size:22px;margin:0 0 16px}
+        p{color:var(--muted);line-height:1.65}
+        .intro{max-width:700px;font-size:17px;margin:0}
+        .hero{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:32px;padding:32px;border:1px solid var(--line);border-radius:16px;background:#ffffff75;margin:28px 0 38px}
+        .hero img{width:100%;height:230px;object-fit:contain;filter:drop-shadow(0 18px 24px #0005)}
+        .hero-note{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:8px 11px;border-radius:8px;background:#0067c012;color:#005a9e;font-size:13px}
+        .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}
+        .section-head h2{margin:0}.section-head p{margin:4px 0 0;font-size:14px}
+        .search{width:min(270px,100%);padding:11px 14px;border:1px solid #00000020;border-radius:8px;color:var(--text);background:#ffffffb5;font:inherit;outline:none}
+        .search:focus{border-color:var(--accent);box-shadow:0 0 0 3px #70baff22}
+        .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+        .card{min-height:218px;padding:20px;border:1px solid var(--line);border-radius:12px;background:#ffffff85;transition:background .18s}
+        .card:hover{background:#ffffff}
+        .card img{width:56px;height:56px;object-fit:contain;margin-bottom:12px}
+        .card h3{margin:0 0 7px;font-size:17px}.card p{margin:0;font-size:14px}
+        .spec{display:block;color:#005a9e;font-size:12px;font-weight:600;margin-top:14px}
+        .empty{display:none;color:var(--muted);padding:24px;text-align:center}
+        .taskbar{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid #ffffff38;border-radius:17px;background:#dce8f3c9;backdrop-filter:blur(24px);box-shadow:0 8px 30px #0004}
+        .taskbar a{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;transition:background .16s,transform .16s}.taskbar a:hover{background:#ffffffaa;transform:translateY(-2px)}
+        .taskbar img{width:27px;height:27px;object-fit:contain}
+        @media(max-width:720px){body{padding:12px 12px 90px}.hero{grid-template-columns:1fr;padding:24px;gap:5px}.hero img{height:170px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-head{align-items:stretch;flex-direction:column}.search{width:100%}}
+        @media(max-width:450px){.grid{grid-template-columns:1fr}.content{padding:24px 18px}.taskbar{bottom:10px}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+    </style>
+</head>
+<body>
+    <main class="app">
+        <header class="titlebar">
+            <div class="brand"><img src="img/hardware.png" alt=""><span>Explorador de Hardware</span></div>
+            <div class="window-actions" aria-hidden="true"><span>−</span><span>□</span><span>×</span></div>
+        </header>
+        <div class="content">
+            <span class="eyebrow">Componentes del ordenador</span>
+            <h1>Hardware</h1>
+            <p class="intro">Estas son algunas de las piezas habituales de un ordenador y para qué sirve cada una.</p>
+            <section class="hero" aria-label="Introducción al hardware">
+                <div>
+                    <span class="eyebrow">Dentro del equipo</span>
+                    <h2>Cada pieza tiene su función</h2>
+                    <p>El procesador realiza los cálculos y las unidades de almacenamiento guardan el sistema, los programas y tus archivos.</p>
+                    <span class="hero-note">Componentes internos y externos</span>
+                </div>
+                <img src="img/pc-config.png" alt="Ilustración de un ordenador configurado">
+            </section>
+            <section aria-labelledby="components-title">
+                <div class="section-head">
+                    <div><h2 id="components-title">Componentes</h2><p>Escribe un nombre para filtrar la lista.</p></div>
+                    <input class="search" id="componentSearch" type="search" placeholder="Buscar componentes..." aria-label="Buscar componentes">
+                </div>
+                <div class="grid" id="componentGrid">
+                    <article class="card" data-search="procesador cpu chip velocidad"><img src="img/CPU.png" alt=""><h3>Procesador</h3><p>Ejecuta las instrucciones de los programas.</p><span class="spec">CPU</span></article>
+                    <article class="card" data-search="disco duro hdd almacenamiento archivos"><img src="img/HDD.png" alt=""><h3>Disco duro</h3><p>Guarda archivos y programas en un disco magnético.</p><span class="spec">HDD</span></article>
+                    <article class="card" data-search="ssd unidad solida almacenamiento rapido"><img src="img/SSD.png" alt=""><h3>SSD</h3><p>Almacena datos en memoria flash y no tiene piezas móviles.</p><span class="spec">Unidad de estado sólido</span></article>
+                    <article class="card" data-search="m2 nvme ssd almacenamiento compacto"><img src="img/M2-ssd.png" alt=""><h3>SSD M.2</h3><p>Una unidad compacta que se instala en la placa base.</p><span class="spec">Formato M.2</span></article>
+                    <article class="card" data-search="usb memoria portatil externo"><img src="img/USB.png" alt=""><h3>Memoria USB</h3><p>Sirve para guardar y pasar archivos entre dispositivos.</p><span class="spec">Almacenamiento extraíble</span></article>
+                    <article class="card" data-search="micro sd tarjeta memoria camara"><img src="img/MicroSD.png" alt=""><h3>Tarjeta microSD</h3><p>Una tarjeta pequeña para ampliar el almacenamiento.</p><span class="spec">Memoria extraíble</span></article>
+                </div>
+                <p class="empty" id="emptyMessage">No se encontraron componentes con ese nombre.</p>
+            </section>
+        </div>
+    </main>
+    <nav class="taskbar" aria-label="Navegación principal">
+        <a href="index.html" title="Inicio"><img src="img/windows-11.png" alt="Inicio"></a>
+        <a href="Hardware.html" title="Hardware" aria-current="page"><img src="img/hardware.png" alt="Hardware"></a>
+        <a href="Redes.html" title="Redes"><img src="img/icono-web.png" alt="Redes"></a>
+        <a href="Galeria.html" title="Galería"><img src="img/carpeta-imagen.png" alt="Galería"></a>
+    </nav>
+    <script>
+        const searchInput = document.getElementById("componentSearch");
+        const cards = [...document.querySelectorAll(".card")];
+        const emptyMessage = document.getElementById("emptyMessage");
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.trim().toLocaleLowerCase("es");
+            let visible = 0;
+            cards.forEach(card => {
+                const matches = card.dataset.search.includes(query);
+                card.hidden = !matches;
+                if (matches) visible++;
+            });
+            emptyMessage.style.display = visible ? "none" : "block";
+        });
+    </script>
+</body>
+</html>

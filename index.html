@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Proyecto-Web Windows 11</title>
+        <link rel="icon" href="img/windows-11.svg">
+        <link rel="stylesheet" href="css/index-css.css" !important>
+        <style>
+            *{
+                margin:0;
+                padding:0;
+                box-sizing:border-box;
+                font-family:"Segoe UI",sans-serif;
+            }
+            body{
+                margin:0;
+                min-height:100vh;
+                background-image:url("img/windows-11-morado-abstracto.avif");
+                background-size:cover;
+                background-position:center;
+                background-repeat:no-repeat;
+                background-attachment:fixed;
+                font-family:"Segoe UI",sans-serif;
+            }
+            h1,h2,h3,h4,h5,h6{
+                font-family:"Segoe UI",sans-serif;
+                color:rgb(12, 74, 150);
+            }
+            p{
+                font-family:"Segoe UI",sans-serif;
+                color: blanchedalmond;
+            }
+        /*Barra izquierda*/
+            .taskbar-1 {
+                position: absolute;
+                bottom: 5px;        /* La sitúa abajo del todo, al mismo nivel que la barra central */
+                left: 10px;          /* Distancia separada del borde izquierdo de la pantalla */
+                                
+                width: fit-content;  /* Hace que la barra mida solo lo que ocupan sus iconos */
+                display: flex;
+                align-items: left;
+                gap: 10px;
+                padding: 6px 50px;  /* Aumentamos el padding horizontal (36px) para alargarla */
+                
+                background: rgba(255, 255, 255, 0.75);
+                backdrop-filter: blur(20px);
+                border-radius: 18px;
+                }
+
+            /* Control estricto del tamaño de los iconos para que no se deformen */
+            .taskbar-1 img {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                display: block;
+                align-items:center;
+            }
+            .taskbar-1 a {
+                border: none;              /* Elimina cualquier borde o línea */
+                background: transparent;   /* Fondo transparente por defecto */
+                padding: 8px;
+                border-radius: 50%;        /* Hace el hover circular */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s ease;
+            }
+            .taskbar-1 a:hover {
+                background: rgba(255, 255, 255, 0.5);
+            }
+            .taskbar-1 button {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                outline: none !important;
+                padding: 6px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: left;
+                transition: background 0.2s ease;
+            }
+            .taskbar-1 button:hover {
+                background: rgba(0, 0, 0, 0.08) !important;
+            }
+            .taskbar-1 img {
+                width: 28px;
+                height: 28px;
+                object-fit: contain;
+                display: block;
+                border: none !important;
+            }
+        /* Barra central */
+            .taskbar{
+                position:fixed;
+                bottom:5px;
+                left:50%;
+                transform:translateX(-50%);
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:1px 100px;
+                background:rgba(255,255,255,.75);
+                backdrop-filter:blur(20px);
+                border-radius:18px;
+                min-height: 5px;
+                }
+            .taskbar img{
+                width:32px;
+                height:32px;
+            }
+            .taskbar a{
+                padding:8px;
+                border-radius:10px;
+                transition:.2s;
+                min-height: -10px;
+            }
+            .taskbar a:hover{
+                background:rgba(255,255,255,.5);
+            }
+        /* Panel del reloj */
+            .reloj{
+                position:fixed;
+                bottom:5px;
+            /* Ajusta según el ancho de tu taskbar */
+                left:calc(58% + 505px);
+                width:110px;
+                padding: 9px 24px;  /* Aumentamos el padding horizontal (24px) para alargarla */
+                background:rgba(255,255,255,.75);
+                backdrop-filter:blur(20px);
+                border-radius:18px;
+                text-align:center;
+                z-index:9999;
+            }
+            #hora{
+                font-size:20px;
+                font-weight:700;
+                line-height:1;
+            }
+            #fecha{
+                margin-top:4px;
+                font-size:12px;
+                font-weight:500;
+                opacity:.85;
+            }
+        /* Contenido */
+            .contenido{
+                margin-left:center;
+                padding:40px;
+            }
+            .contenido h1{
+                font-size:60px;
+                margin-bottom:20px;
+            }
+            .contenido p{
+                font-size:24px;
+            }
+        /* Ventana */
+            .ventana{
+                display:none;
+                position:fixed;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                padding:20px;
+                background:rgba(0,0,0,.35);
+                justify-content:center;
+                align-items:center;
+                z-index:9999;
+            }
+            .ventana-contenido{
+                width:800px;
+                max-width:90%;
+                max-height:90vh;
+                background:white;
+                border-radius:25px;
+                overflow:hidden;
+            }
+            .barra-titulo{
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                padding:20px;
+                background:#f5f5f5;
+                border-bottom:1px solid #ddd;
+            }
+            .barra-titulo h2{
+                font-size:28px;
+            }
+            .cerrar{
+                width:45px;
+                height:45px;
+                border:none;
+                border-radius:10px;
+                cursor:pointer;
+                background:#e5e5e5;
+            }
+            .cerrar:hover{
+                background:#ff4d4d;
+                color:white;
+            }
+            .ajustes{
+                padding:25px;
+            }
+            .ajustes h3{
+                margin-bottom:15px;
+            }
+            .ajustes a{
+                display:block;
+                text-decoration:none;
+                color:black;
+                background:#f5f5f5;
+                padding:15px;
+                border-radius:12px;
+                margin-bottom:10px;
+                transition:.3s;
+            }
+            .ajustes a:hover{
+                background:#e5e5e5;
+            }
+            footer{
+                position:fixed;
+                bottom:15px;
+                left:1670px;
+            }
+            sidebar{
+                width:32px;
+                height:32px;
+            }
+        </style>
+    </head>
+    <body background="img/windows-11-morado-abstracto.avif">
+        <!-- Contenido -->
+            <div class="contenido">
+                <h1>Proyecto Web</h1>
+                <p><i>Bienvenido a mi proyecto.
+                      Hecho por Iván Vaquero,<br>
+                      un proyecto que simula un sistema operativo<br>
+                      basado en Windows 11 con estilo Fluent Design.
+                </i></p>
+                <br><br>
+                <h4>© 2026 Proyecto-Web</h4>
+            </div>
+            <!-- Ventana de Ajustes -->
+            <div class="taskbar-1">
+                <button onclick="location.href='calendario_windows_11_fluent.html'">
+                    <img src="img/Calendar.png" alt="Google Calendar">
+                </button>
+            </div>
+
+            <!-- Barra izquierda -->
+            <div class="taskbar">
+                <button onclick="abrirCalendario()">
+                    <img src="img/ajustes-1.png" alt="Calendario Local">
+                </button>
+            </div>
+            <!-- Barra central -->
+             <div class="taskbar">
+                <button id="botonAjustes" type="button" aria-haspopup="dialog" aria-controls="ventanaAjustes" aria-expanded="false" onclick="abrirAjustes()">
+                    <img src="img/ajustes-1.png" alt="Ajustes del Sistema">
+                </button>
+                <a href="https://www.bing.com/" target="_blank">
+                    <img src="img/Microsoft_Edge_logo_(2019).png" alt="Bing">
+                </a>
+                <a href='Hardware.html' target="_blank">
+                    <img src="img/hardware.png" alt="Hardware"> 
+                </a>
+                <a href='Redes.html' target="_blank">
+                    <img src="img/icono-web.png" alt="Redes">
+                </a>
+                <a href='Galeria.html' target="_blank">
+                    <img src="img/carpeta-imagen.png" alt="Galería">
+                </a>
+                <a href='Copilot.html' target="_blank">
+                    <img src="img/copilot-cli.png" alt="Copilot">
+                </a>
+                <a href='https://vscode.dev/?vscode-lang=es-es' target="_blank">
+                    <img src="code-icon.svg" alt="Visual Studio Code">
+                </a>
+                <a href='Alexa-1.html' target="_blank">
+                    <img src="Alexa.png" alt="Alexa API">
+                </a>
+            </div>
+            <div class="ventana" id="ventanaAjustes" role="dialog" aria-modal="true" aria-labelledby="tituloAjustes">
+                <section class="ventana-contenido">
+                    <header class="barra-titulo">
+                        <h2 id="tituloAjustes">Ajustes</h2>
+                        <button class="cerrar" type="button" aria-label="Cerrar Ajustes" onclick="cerrarAjustes()">×</button>
+                    </header>
+                    <div class="ajustes">
+                        <h3>Accesos rápidos</h3>
+                        <a href="Hardware.html"><strong>Sistema</strong><br>Consulta los componentes del equipo.</a>
+                        <a href="Redes.html"><strong>Red e Internet</strong><br>Información sobre redes y conexiones.</a>
+                        <a href="Galeria.html"><strong>Personalización</strong><br>Abre la galería de imágenes.</a>
+                        <a href="calendario_windows_11_fluent.html"><strong>Fecha y hora</strong><br>Consulta el calendario.</a>
+                        <a href="Copilot.html"><strong>Copilot</strong><br>Abre la página de Copilot.</a>
+                        <a href="https://vscode.dev/?vscode-lang=es-es" target="_blank"><strong>Visual Studio Code</strong><br>Abre Visual Studio Code en el navegador.</a>
+                        <a href="https://www.bing.com/" target="_blank"><strong>Bing</strong><br>Abre el buscador Bing.</a>
+                        <a href="Alexa-1.html" target="_blank"><strong>Alexa</strong><br>Abre la app de Alexa</a>
+                    </div>
+                </section>
+            </div>
+            <br>
+            <div class="reloj">
+                <div id="hora"></div>
+                <div id="fecha"></div>
+            </div>          
+        </div>
+        <script>
+            //Ajustes
+            function abrirAjustes(){
+                document.getElementById("ventanaAjustes").style.display = "flex";
+                document.getElementById("botonAjustes").setAttribute("aria-expanded", "true");
+                document.querySelector("#ventanaAjustes .cerrar").focus();
+            }
+            function cerrarAjustes(){
+                document.getElementById("ventanaAjustes").style.display = "none";
+                document.getElementById("botonAjustes").setAttribute("aria-expanded", "false");
+                document.getElementById("botonAjustes").focus();
+            }
+            window.addEventListener("click", function(e){
+                const ventana =
+                document.getElementById("ventanaAjustes");
+                if(e.target === ventana){
+                    cerrarAjustes();
+                }
+            });
+            document.addEventListener("keydown", function(e){
+                if(e.key === "Escape" && document.getElementById("ventanaAjustes").style.display === "flex"){
+                    cerrarAjustes();
+                }
+            });
+            //Calendario
+            function abrirCalendario() {
+            window.location.href = "calendario_windows_11_fluent.html";
+            // O el código que uses para abrir la ventana/modal
+            }
+            //hora
+            function actualizarReloj(){
+            const ahora = new Date();
+            document.getElementById("hora").innerHTML =
+                ahora.toLocaleTimeString("es-ES",{
+                    hour:"2-digit",
+                    minute:"2-digit"
+                });
+            document.getElementById("fecha").innerHTML =
+                ahora.toLocaleDateString("es-ES");
+            }
+            actualizarReloj();
+            setInterval(actualizarReloj,1000);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1f2e46">
+    <title>Copilot-Windows 11</title>
+    <link rel="icon" href="img/copilot-cli.png">
+    <style>
+        :root {
+            color-scheme: light;
+            --text: #1f2937;
+            --muted: #5e6671;
+            --accent: #0067c0;
+            --panel: rgba(245, 246, 248, 0.86);
+            --line: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 28px 24px 100px;
+            color: var(--text);
+            font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+            background: linear-gradient(120deg, rgba(18, 25, 38, 0.28), rgba(17, 35, 58, 0.18)), url("img/windows-11-morado-abstracto.avif") center/cover fixed;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .app {
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 22px;
+            overflow: hidden;
+            background: var(--panel);
+            backdrop-filter: blur(28px) saturate(130%);
+            box-shadow: 0 24px 80px rgba(6, 16, 31, 0.26);
+        }
+
+        .titlebar {
+            height: 54px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        .brand,
+        .window-actions,
+        .nav,
+        .nav a {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand {
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .brand img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .window-actions {
+            gap: 8px;
+            color: #343a40;
+            font-size: 13px;
+        }
+
+        .window-actions span {
+            width: 30px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            border-radius: 7px;
+        }
+
+        .window-actions span:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .window-actions span:last-child:hover {
+            background: #c42b1c;
+            color: white;
+        }
+
+        .content {
+            padding: clamp(22px, 5vw, 56px);
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            line-height: 1.04;
+            letter-spacing: -0.04em;
+            margin: 10px 0 14px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin: 0 0 16px;
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .intro {
+            max-width: 700px;
+            font-size: 17px;
+            margin: 0;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 26px;
+            padding: 30px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.75);
+            margin: 28px 0 28px;
+        }
+
+        .hero img {
+            width: min(100%, 180px);
+            height: auto;
+            max-height: 160px;
+            object-fit: contain;
+            justify-self: center;
+            filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.16));
+        }
+
+        .hero-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: rgba(0, 103, 192, 0.08);
+            color: #005a9e;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 18px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #005cc8, #3b82f6);
+            color: white;
+            box-shadow: 0 10px 22px rgba(59, 130, 246, 0.35);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.75);
+            border-color: rgba(0, 0, 0, 0.12);
+            color: var(--text);
+        }
+
+        .browser {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .browser-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .browser-dots span {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .browser-dots span:nth-child(1) { background: #ff5f57; }
+        .browser-dots span:nth-child(2) { background: #febc2e; }
+        .browser-dots span:nth-child(3) { background: #28c840; }
+
+        .browser-address {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .browser-viewport {
+            position: relative;
+            width: 100%;
+            height: 640px;
+            background: white;
+        }
+
+        .browser-fallback {
+            display: grid;
+            place-items: center;
+            background: linear-gradient(180deg, #f6f8ff, #eef4ff);
+            padding: 28px;
+        }
+
+        .fallback-content {
+            max-width: 520px;
+            text-align: center;
+            padding: 30px 24px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 12px 30px rgba(28, 58, 109, 0.08);
+        }
+
+        .fallback-content img {
+            width: 88px;
+            height: 88px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .fallback-content h3 {
+            margin: 0 0 10px;
+            font-size: 30px;
+        }
+
+        .fallback-content p {
+            margin: 0 0 18px;
+            font-size: 15px;
+            color: var(--muted);
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 17px;
+            background: rgba(220, 232, 243, 0.8);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .taskbar a {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            transition: background 0.16s ease, transform 0.16s ease;
+        }
+
+        .taskbar a:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .taskbar img {
+            width: 27px;
+            height: 27px;
+            object-fit: contain;
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 12px 12px 90px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 24px;
+                gap: 18px;
+            }
+
+            .browser-viewport {
+                height: 540px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .browser-address {
+                display: none;
+            }
+
+            .content {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="app">
+        <header class="titlebar">
+            <div class="brand">
+                <img src="img/copilot-cli.png" alt="Copilot">
+                <span>Copilot</span>
+            </div>
+            <div class="window-actions" aria-hidden="true">
+                <span>−</span>
+                <span>□</span>
+                <span>×</span>
+            </div>
+        </header>
+
+        <div class="content">
+            <span class="eyebrow">Asistente de IA</span>
+            <h1>Copilot</h1>
+            <p class="intro">Accede a la ayuda inteligente de Microsoft para buscar información, resolver dudas y trabajar más rápido desde tu navegador.</p>
+
+            <section class="hero" aria-label="Introducción a Copilot">
+                <div>
+                    <span class="eyebrow">Microsoft</span>
+                    <h2>Tu asistente digital</h2>
+                    <p>Copilot combina respuestas rápidas, creatividad y productividad para ayudarte a completar tareas y explorar ideas en segundos.</p>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="https://copilot.com/es-es/" target="_blank" rel="noopener noreferrer">Abrir Copilot</a>
+                        <a class="btn btn-secondary" href="index.html">Volver al inicio</a>
+                    </div>
+                    <span class="hero-note">OpenAI + Microsoft</span>
+                </div>
+                <img src="Copilot-CLI-2.png" alt="Icono de Copilot">
+            </section>
+
+            <section class="browser" aria-label="Vista previa de Copilot">
+                <div class="browser-bar">
+                    <div class="browser-dots" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="browser-address">copilot.com/es-es/</div>
+                </div>
+                <div class="browser-viewport browser-fallback">
+                    <div class="fallback-content">
+                        <img src="img/copilot-cli.png" alt="Copilot">
+                        <h3>Copilot</h3>
+                        <p>Este sitio no permite mostrarse dentro de un iframe, así que se abre en una nueva pestaña para que puedas usarlo correctamente.</p>
+                        <a class="btn btn-primary" href="https://copilot.com/es-es/" target="_blank" rel="noopener noreferrer">Abrir Copilot</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <nav class="taskbar" aria-label="Navegación principal">
+        <a href="index.html" title="Inicio"><img src="img/windows-11.png" alt="Inicio"></a>
+        <a href="Hardware.html" title="Hardware"><img src="img/hardware.png" alt="Hardware"></a>
+        <a href="Redes.html" title="Redes"><img src="img/icono-web.png" alt="Redes"></a>
+        <a href="Galeria.html" title="Galería"><img src="img/carpeta-imagen.png" alt="Galería"></a>
+        <a href="Copilot.html" title="Copilot" aria-current="page"><img src="img/copilot-cli.png" alt="Copilot"></a>
+    </nav>
+</body>
+</html>

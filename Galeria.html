@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#17253a">
+    <title>Galería | Windows 11</title>
+    <link rel="icon" href="img/carpeta-imagen.png">
+    <style>
+        :root{color-scheme:light;--text:#202124;--muted:#5e6671;--accent:#0067c0;--panel:rgba(246,246,246,.86);--line:rgba(0,0,0,.1)}
+        *{box-sizing:border-box}
+        body{margin:0;min-height:100vh;padding:28px 24px 100px;color:var(--text);font-family:"Segoe UI Variable","Segoe UI",sans-serif;background:linear-gradient(120deg,rgba(18,25,38,.3),rgba(17,35,58,.18)),url("img/windows-11-morado-abstracto.avif") center/cover fixed}
+        a{color:inherit;text-decoration:none}
+        .app{max-width:1180px;margin:0 auto;border:1px solid #ffffffa6;border-radius:22px;overflow:hidden;background:var(--panel);backdrop-filter:blur(30px) saturate(135%);box-shadow:0 24px 80px #06101f40}
+        .titlebar{height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#ffffff80}
+        .brand,.window-actions,.taskbar{display:flex;align-items:center}
+        .brand{gap:10px;font-size:14px;font-weight:600}.brand img{width:24px;height:24px;object-fit:contain}
+        .window-actions{gap:8px;color:#343a40;font-size:13px}.window-actions span{width:30px;height:28px;display:grid;place-items:center;border-radius:7px}.window-actions span:hover{background:#0000000d}.window-actions span:last-child:hover{background:#c42b1c;color:white}
+        .content{padding:clamp(22px,5vw,56px)}
+        .eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+        h1{font-size:clamp(36px,6vw,64px);line-height:1.04;letter-spacing:-.04em;margin:10px 0 14px}
+        h2{font-size:22px;margin:0 0 16px}
+        p{color:var(--muted);line-height:1.65}
+        .intro{max-width:700px;font-size:17px;margin:0}
+        .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:30px 0 18px}
+        .toolbar p{margin:0;font-size:14px}
+        .filters{display:flex;flex-wrap:wrap;gap:8px}
+        .filter{padding:9px 15px;border:1px solid var(--line);border-radius:7px;background:#ffffff85;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;transition:.16s}
+        .filter:hover,.filter.active{background:#0067c014;border-color:#0067c060;color:#005a9e}
+        .gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:220px;gap:14px}
+        .photo{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#ffffff85;cursor:pointer;padding:0;text-align:left;color:var(--text)}
+        .photo.wide{grid-column:span 2}
+        .photo img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .3s}
+        .photo:hover img,.photo:focus-visible img{transform:scale(1.045)}
+        .caption{position:absolute;inset:auto 0 0;padding:36px 16px 15px;background:linear-gradient(transparent,#07101dd9);font-size:15px;font-weight:600}
+        .caption small{display:block;margin-top:4px;color:#f0f3f7d9;font-size:12px;font-weight:400}
+        .photo[hidden]{display:none}
+        .empty{display:none;padding:26px;text-align:center;color:var(--muted)}
+        .lightbox{position:fixed;inset:0;z-index:5;display:none;place-items:center;padding:24px;background:#030812d9;backdrop-filter:blur(14px)}
+        .lightbox.open{display:grid}
+        .lightbox figure{position:relative;width:min(100%,1000px);margin:0;text-align:center}
+        .lightbox img{display:block;max-width:100%;max-height:78vh;margin:auto;border-radius:14px;box-shadow:0 20px 80px #0008}
+        .lightbox figcaption{padding:12px;color:#e6edf7}
+        .close{position:absolute;top:-14px;right:-14px;width:42px;height:42px;border:1px solid #ffffff40;border-radius:50%;background:#26364b;color:white;font-size:22px;cursor:pointer}
+        .taskbar{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);gap:8px;padding:9px 14px;border:1px solid #ffffff38;border-radius:17px;background:#dce8f3c9;backdrop-filter:blur(24px);box-shadow:0 8px 30px #0004}
+        .taskbar a{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;transition:background .16s,transform .16s}.taskbar a:hover{background:#ffffffaa;transform:translateY(-2px)}
+        .taskbar img{width:27px;height:27px;object-fit:contain}
+        @media(max-width:720px){body{padding:12px 12px 90px}.gallery{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:190px}.toolbar{align-items:flex-start;flex-direction:column}}
+        @media(max-width:450px){.gallery{grid-template-columns:1fr;grid-auto-rows:210px}.photo.wide{grid-column:span 1}.content{padding:24px 18px}.taskbar{bottom:10px}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+    </style>
+</head>
+<body>
+    <main class="app">
+        <header class="titlebar">
+            <div class="brand"><img src="img/carpeta-imagen.png" alt=""><span>Galería de fotos</span></div>
+            <div class="window-actions" aria-hidden="true"><span>−</span><span>□</span><span>×</span></div>
+        </header>
+        <div class="content">
+            <span class="eyebrow">Imágenes del proyecto</span>
+            <h1>Galería</h1>
+            <p class="intro">Imágenes guardadas en la carpeta del proyecto. Selecciona una para verla en grande.</p>
+            <div class="toolbar">
+                <p id="photoCount" aria-live="polite"></p>
+                <div class="filters" role="group" aria-label="Filtrar imágenes">
+                    <button class="filter active" type="button" data-filter="all" aria-pressed="true">Todo</button>
+                    <button class="filter" type="button" data-filter="windows" aria-pressed="false">Windows</button>
+                    <button class="filter" type="button" data-filter="tecnologia" aria-pressed="false">Tecnología</button>
+                    <button class="filter" type="button" data-filter="creativo" aria-pressed="false">Creativo</button>
+                </div>
+            </div>
+            <section class="gallery" id="gallery" aria-label="Imágenes">
+                <button class="photo wide" type="button" data-category="windows" data-title="Windows 11" data-image="img/windows-11-morado-abstracto.avif"><img src="img/windows-11-morado-abstracto.avif" alt="Fondo abstracto morado de Windows 11" loading="lazy"><span class="caption">Windows 11<small>Fondos y escritorio</small></span></button>
+                <button class="photo" type="button" data-category="tecnologia" data-title="Estación de trabajo" data-image="img/pc-config.png"><img src="img/pc-config.png" alt="Equipo de sobremesa" loading="lazy"><span class="caption">Estación de trabajo<small>Hardware</small></span></button>
+                <button class="photo" type="button" data-category="creativo" data-title="Ilustración futurista" data-image="img/futuristic-car-illustration.avif"><img src="img/futuristic-car-illustration.avif" alt="Ilustración de un coche futurista" loading="lazy"><span class="caption">Ilustración futurista<small>Diseño digital</small></span></button>
+                <button class="photo" type="button" data-category="creativo" data-title="Paisaje urbano" data-image="img/pexels-acev.avif"><img src="img/pexels-acev.avif" alt="Fotografía de paisaje urbano" loading="lazy"><span class="caption">Paisaje urbano<small>Fotografía</small></span></button>
+                <button class="photo" type="button" data-category="tecnologia" data-title="Pantalla profesional" data-image="img/pro-display-xdr.png"><img src="img/pro-display-xdr.png" alt="Monitor profesional" loading="lazy"><span class="caption">Pantalla profesional<small>Dispositivos</small></span></button>
+                <button class="photo" type="button" data-category="windows" data-title="Escritorio Windows" data-image="img/windows-11.png"><img src="img/windows-11.png" alt="Icono de Windows 11" loading="lazy"><span class="caption">Escritorio Windows<small>Iconos del sistema</small></span></button>
+                <button class="photo" type="button" data-category="tecnologia" data-title="Consola" data-image="img/ps5.png"><img src="img/ps5.png" alt="Consola de videojuegos" loading="lazy"><span class="caption">Consola<small>Entretenimiento</small></span></button>
+                <button class="photo" type="button" data-category="tecnologia" data-title="Teléfono móvil" data-image="img/phone.png"><img src="img/phone.png" alt="Teléfono móvil" loading="lazy"><span class="caption">Teléfono móvil<small>Dispositivos</small></span></button>
+            </section>
+            <p class="empty" id="emptyMessage">No hay imágenes en esta categoría.</p>
+        </div>
+    </main>
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Vista de imagen">
+        <figure><button class="close" id="closeLightbox" type="button" aria-label="Cerrar">×</button><img id="lightboxImage" src="" alt=""><figcaption id="lightboxCaption"></figcaption></figure>
+    </div>
+    <nav class="taskbar" aria-label="Navegación principal">
+        <a href="index.html" title="Inicio"><img src="img/windows-11.png" alt="Inicio"></a>
+        <a href="Hardware.html" title="Hardware"><img src="img/hardware.png" alt="Hardware"></a>
+        <a href="Redes.html" title="Redes"><img src="img/icono-web.png" alt="Redes"></a>
+        <a href="Galeria.html" title="Galería" aria-current="page"><img src="img/carpeta-imagen.png" alt="Galería"></a>
+    </nav>
+    <script>
+        const photos = [...document.querySelectorAll(".photo")];
+        const filterButtons = [...document.querySelectorAll(".filter")];
+        const photoCount = document.getElementById("photoCount");
+        const emptyMessage = document.getElementById("emptyMessage");
+        filterButtons.forEach(button => button.addEventListener("click", () => {
+            filterButtons.forEach(item => {
+                const selected = item === button;
+                item.classList.toggle("active", selected);
+                item.setAttribute("aria-pressed", String(selected));
+            });
+            let visible = 0;
+            photos.forEach(photo => {
+                const matches = button.dataset.filter === "all" || photo.dataset.category === button.dataset.filter;
+                photo.hidden = !matches;
+                if (matches) visible++;
+            });
+            photoCount.textContent = `${visible} ${visible === 1 ? "imagen" : "imágenes"}`;
+            emptyMessage.style.display = visible ? "none" : "block";
+        }));
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImage = document.getElementById("lightboxImage");
+        const lightboxCaption = document.getElementById("lightboxCaption");
+        const closeButton = document.getElementById("closeLightbox");
+        function closeLightbox() {
+            lightbox.classList.remove("open");
+            lightboxImage.src = "";
+        }
+        photos.forEach(photo => photo.addEventListener("click", () => {
+            lightboxImage.src = photo.dataset.image;
+            lightboxImage.alt = photo.querySelector("img").alt;
+            lightboxCaption.textContent = photo.dataset.title;
+            lightbox.classList.add("open");
+            closeButton.focus();
+        }));
+        closeButton.addEventListener("click", closeLightbox);
+        lightbox.addEventListener("click", event => {
+            if (event.target === lightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape" && lightbox.classList.contains("open")) closeLightbox();
+        });
+        photoCount.textContent = `${photos.length} imágenes`;
+    </script>
+</body>
+</html>

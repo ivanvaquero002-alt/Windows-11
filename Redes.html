@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#17253a">
+    <title>Redes | Windows 11</title>
+    <link rel="icon" href="img/icono-web.png">
+    <style>
+        :root{color-scheme:light;--text:#202124;--muted:#5e6671;--accent:#0067c0;--panel:rgba(246,246,246,.86);--line:rgba(0,0,0,.1)}
+        *{box-sizing:border-box}
+        body{margin:0;min-height:100vh;padding:28px 24px 100px;color:var(--text);font-family:"Segoe UI Variable","Segoe UI",sans-serif;background:linear-gradient(120deg,rgba(18,25,38,.3),rgba(17,35,58,.18)),url("img/windows-11-morado-abstracto.avif") center/cover fixed}
+        a{color:inherit;text-decoration:none}
+        .app{max-width:1180px;margin:0 auto;border:1px solid #ffffffa6;border-radius:22px;overflow:hidden;background:var(--panel);backdrop-filter:blur(30px) saturate(135%);box-shadow:0 24px 80px #06101f40}
+        .titlebar{height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#ffffff80}
+        .brand,.window-actions,.taskbar{display:flex;align-items:center}
+        .brand{gap:10px;font-size:14px;font-weight:600}.brand img{width:24px;height:24px;object-fit:contain}
+        .window-actions{gap:8px;color:#343a40;font-size:13px}.window-actions span{width:30px;height:28px;display:grid;place-items:center;border-radius:7px}.window-actions span:hover{background:#0000000d}.window-actions span:last-child:hover{background:#c42b1c;color:white}
+        .content{padding:clamp(22px,5vw,56px)}
+        .eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+        h1{font-size:clamp(36px,6vw,64px);line-height:1.04;letter-spacing:-.04em;margin:10px 0 14px}
+        h2{font-size:22px;margin:0 0 16px}
+        p{color:var(--muted);line-height:1.65}
+        .intro{max-width:700px;font-size:17px;margin:0}
+        .status{display:flex;align-items:center;gap:14px;margin:28px 0 34px;padding:20px 22px;border:1px solid var(--line);border-radius:12px;background:#ffffff85}
+        .status-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:#0067c014;color:#005a9e;font-size:20px}
+        .status h2{font-size:16px;margin:0 0 3px}.status p{font-size:14px;margin:0}
+        .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+        .card{padding:22px;border:1px solid var(--line);border-radius:12px;background:#ffffff85}
+        .card img{width:52px;height:52px;object-fit:contain;margin-bottom:13px}
+        .card h2{font-size:18px;margin:0 0 8px}.card p{font-size:14px;margin:0}
+        .tag{display:inline-block;margin-top:16px;padding:6px 10px;border-radius:7px;background:#0067c012;color:#005a9e;font-size:12px}
+        .tips{margin-top:32px;padding:24px;border:1px solid var(--line);border-radius:12px;background:#ffffff75}
+        .tips h2{margin-bottom:14px}.tips ul{margin:0;padding-left:20px;color:var(--muted);line-height:1.9}
+        .taskbar{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);gap:8px;padding:9px 14px;border:1px solid #ffffff38;border-radius:17px;background:#dce8f3c9;backdrop-filter:blur(24px);box-shadow:0 8px 30px #0004}
+        .taskbar a{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;transition:background .16s,transform .16s}.taskbar a:hover{background:#ffffffaa;transform:translateY(-2px)}
+        .taskbar img{width:27px;height:27px;object-fit:contain}
+        @media(max-width:720px){body{padding:12px 12px 90px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:450px){.grid{grid-template-columns:1fr}.content{padding:24px 18px}.taskbar{bottom:10px}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+    </style>
+</head>
+<body>
+    <main class="app">
+        <header class="titlebar">
+            <div class="brand"><img src="img/icono-web.png" alt=""><span>Redes e Internet</span></div>
+            <div class="window-actions" aria-hidden="true"><span>−</span><span>□</span><span>×</span></div>
+        </header>
+        <div class="content">
+            <span class="eyebrow">Conceptos básicos</span>
+            <h1>Redes</h1>
+            <p class="intro">Una red conecta dispositivos para que puedan comunicarse y compartir información.</p>
+            <section class="status" aria-label="Información sobre redes">
+                <div class="status-icon" aria-hidden="true">i</div>
+                <div><h2>Tipos de red y servicios</h2><p>Algunos ejemplos habituales y unas recomendaciones básicas de seguridad.</p></div>
+            </section>
+            <section class="grid" aria-label="Tipos de conexiones y servicios">
+                <article class="card"><img src="img/icono-web.png" alt=""><h2>Internet</h2><p>La red mundial que permite visitar sitios web y usar servicios en línea.</p><span class="tag">Red pública</span></article>
+                <article class="card"><img src="img/server.png" alt=""><h2>Red local</h2><p>Conecta los dispositivos de una casa, un aula o una oficina.</p><span class="tag">LAN</span></article>
+                <article class="card"><img src="img/nube-web.png" alt=""><h2>Almacenamiento en la nube</h2><p>Guarda archivos en servidores de Internet y accede a ellos desde otros equipos.</p><span class="tag">Archivos en línea</span></article>
+                <article class="card"><img src="img/velocidad.png" alt=""><h2>Router</h2><p>Dirige el tráfico entre los dispositivos de la red local e Internet.</p><span class="tag">Equipo de red</span></article>
+                <article class="card"><img src="img/seguridad.png" alt=""><h2>Seguridad</h2><p>Una contraseña propia y las actualizaciones ayudan a proteger la red Wi-Fi.</p><span class="tag">Wi-Fi</span></article>
+                <article class="card"><img src="img/phone.png" alt=""><h2>Dispositivos</h2><p>Ordenadores y móviles se conectan por Wi-Fi o mediante un cable de red.</p><span class="tag">Conexiones</span></article>
+            </section>
+            <section class="tips" aria-labelledby="tips-title">
+                <h2 id="tips-title">Recomendaciones</h2>
+                <ul><li>Cambia la contraseña que viene por defecto en el router.</li><li>Activa WPA2 o WPA3 si tu router lo permite.</li><li>En una red Wi-Fi pública, evita acceder a cuentas o datos importantes.</li></ul>
+            </section>
+        </div>
+    </main>
+    <nav class="taskbar" aria-label="Navegación principal">
+        <a href="index.html" title="Inicio"><img src="img/windows-11.png" alt="Inicio"></a>
+        <a href="Hardware.html" title="Hardware"><img src="img/hardware.png" alt="Hardware"></a>
+        <a href="Redes.html" title="Redes" aria-current="page"><img src="img/icono-web.png" alt="Redes"></a>
+        <a href="Galeria.html" title="Galería"><img src="img/carpeta-imagen.png" alt="Galería"></a>
+    </nav>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<script>
+    setTimeout(function() {
+        window.location.href = "https://alexa.amazon.com/userProfile?redirectTo=%2FuserProfile";
+    }, 15000); // 15000 milisegundos = 15 segundos
+</script>
+
+<meta http-equiv="refresh" content="15;url=https://alexa.amazon.com/userProfile?redirectTo=%2FuserProfile">

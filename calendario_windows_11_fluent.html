@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Windows 11 Fluent UI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="img/Calendar.png">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        winAccent: {
+                            light: '#0067c0',
+                            dark: '#60cdff',
+                            hoverLight: '#1875d1',
+                            hoverDark: '#4cc2ff'
+                        },
+                        winBg: {
+                            light: '#f3f3f3',
+                            dark: '#202020'
+                        },
+                        winCard: {
+                            light: 'rgba(255, 255, 255, 0.75)',
+                            dark: 'rgba(32, 32, 32, 0.75)'
+                        },
+                        winFlyout: {
+                            light: '#ffffff',
+                            dark: '#2c2c2c'
+                        }
+                    },
+                    fontFamily: {
+                        segoe: ['"Segoe UI Variable Display"', '"Segoe UI"', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Efecto Mica / Acrylic de Windows 11 */
+        .fluent-acrylic-dark {
+            background: rgba(32, 32, 32, 0.75);
+            backdrop-filter: blur(30px) saturate(125%);
+            -webkit-backdrop-filter: blur(30px) saturate(125%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .fluent-acrylic-light {
+            background: rgba(243, 243, 243, 0.85);
+            backdrop-filter: blur(30px) saturate(125%);
+            -webkit-backdrop-filter: blur(30px) saturate(125%);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* Hover Reveal Effect estilo Windows 11 */
+        .win-btn {
+            transition: all 0.15s cubic-bezier(0, 0, 0, 1);
+            position: relative;
+        }
+
+        .win-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid transparent;
+            pointer-events: none;
+            transition: border-color 0.15s;
+        }
+
+        .dark .win-btn:hover {
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+        .light .win-btn:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        /* Animaciones de transición */
+        .slide-fade-enter {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+        .slide-fade-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        /* Scrollbar estilo Windows 11 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(128, 128, 128, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(128, 128, 128, 0.5);
+        }
+    /* botones */
+        .footer-nav{
+            display:flex;
+            justify-content:center;
+            margin-top:25px;
+        }
+
+        .copyright{
+            text-align:center;
+            margin-top:15px;
+            color:#999;
+            font-size:14px;
+            margin-left: 50px;
+        }
+
+        .btn-volver-index{
+            background:transparent;
+            border:none;
+            color:white;
+            cursor:pointer;
+
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+
+        .btn-volver-index img{
+            width:24px;
+            height:24px;
+        }
+        .footer-nav{
+            width:100%;
+            max-width:896px; /* mismo ancho que max-w-4xl */
+            
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            justify-content:center;
+
+            margin-top:20px;
+            padding:20px;
+
+            border-radius:16px;
+
+            background:rgba(32,32,32,0.75);
+            backdrop-filter:blur(30px);
+            border:1px solid rgba(255,255,255,0.08);
+        }
+        #appContainer{
+            border-radius:16px 16px 0 0;
+        }
+        footer{
+            text-align:center;
+            margin-top:20px;
+        }
+    </style>
+</head>
+<body class="font-segoe min-h-screen bg-slate-200 dark:bg-[#1a1a1a] text-slate-800 dark:text-slate-100 transition-colors duration-300 flex flex-col items-center p-2 sm:p-6 select-none">
+    <!-- Wrapper Principal / Estructura del Gadget -->
+    <div id="appContainer" class="w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden fluent-acrylic-dark dark:fluent-acrylic-dark light:fluent-acrylic-light transition-all duration-300">
+        
+        <!-- Barra de Título / Header Windows 11 -->
+        <div class="flex items-center justify-between px-5 py-3 border-b border-slate-300/30 dark:border-white/10 bg-slate-100/40 dark:bg-black/20">
+            <div class="flex items-center gap-2.5">
+                <i class="fa-regular fa-calendar text-winAccent-dark dark:text-winAccent-dark light:text-winAccent-light text-lg"></i>
+                <span class="text-sm font-semibold tracking-wide">Calendario</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <!-- Botón de Modo Oscuro / Claro -->
+                <button id="themeToggleBtn" title="Cambiar Tema" class="win-btn p-2 rounded-lg text-xs flex items-center gap-2 hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+                    <i id="themeIcon" class="fa-solid fa-moon text-amber-400"></i>
+                    <span id="themeLabel" class="hidden sm:inline text-xs font-medium">Modo Oscuro</span>
+                </button>
+                <div class="h-4 w-[1px] bg-slate-300 dark:bg-white/20 mx-1"></div>
+                <!-- Toggle Panel de Eventos en Mobile -->
+                <button id="toggleAgendaBtn" class="sm:hidden win-btn p-2 rounded-lg text-xs hover:bg-black/5 dark:hover:bg-white/10">
+                    <i class="fa-solid fa-list-check"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenido Principal: Grid de 2 Columnas -->
+        <div class="grid grid-cols-1 md:grid-cols-12 min-h-[520px]">
+            
+            <!-- Columna Izquierda: Calendario -->
+            <div class="md:col-span-7 lg:col-span-8 p-4 sm:p-6 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-300/30 dark:border-white/10">
+                
+                <!-- Encabezado del Calendario: Mes/Año + Navegación -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <button id="monthYearBtn" class="win-btn text-lg sm:text-xl font-semibold px-3 py-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 flex items-center gap-2 transition-colors">
+                            <span id="monthYearLabel">Cargando...</span>
+                            <i class="fa-solid fa-chevron-down text-xs opacity-60"></i>
+                        </button>
+                        
+                        <div class="flex items-center gap-1">
+                            <button id="prevBtn" title="Mes Anterior" class="win-btn w-9 h-9 rounded-lg flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all">
+                                <i class="fa-solid fa-chevron-up text-xs"></i>
+                            </button>
+                            <button id="todayBtn" title="Ir a hoy" class="win-btn px-3 h-9 rounded-lg text-xs font-medium hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all">
+                                Hoy
+                            </button>
+                            <button id="nextBtn" title="Mes Siguiente" class="win-btn w-9 h-9 rounded-lg flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Vista Principal: Cuadrícula de Días -->
+                    <div id="calendarView" class="transition-all duration-200">
+                        <!-- Días de la semana -->
+                        <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1">Lu</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1">Ma</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1">Mi</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1">Ju</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1">Vi</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1 text-winAccent-light dark:text-winAccent-dark">Sá</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 py-1 text-winAccent-light dark:text-winAccent-dark">Do</span>
+                        </div>
+
+                        <!-- Cuadrícula de fechas del mes -->
+                        <div id="daysGrid" class="grid grid-cols-7 gap-1">
+                            <!-- Inyectado dinámicamente con JS -->
+                        </div>
+                    </div>
+
+                    <!-- Vista Secundaria: Selector Rápido de Mes/Año (Oculto por defecto) -->
+                    <div id="monthYearPicker" class="hidden grid grid-cols-3 gap-3 my-4">
+                        <!-- Generado por JS -->
+                    </div>
+                </div>
+
+                <!-- Footer Info / Fecha Extendida -->
+                <div class="mt-6 pt-4 border-t border-slate-300/30 dark:border-white/10 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-winAccent-light dark:bg-winAccent-dark animate-pulse"></span>
+                        <span id="fullSelectedDate">Día seleccionado</span>
+                    </div>
+                    <span class="font-mono text-[11px] opacity-70">Win11 UI v2.5</span>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Panel de Agenda / Eventos -->
+            <div id="agendaPanel" class="md:col-span-5 lg:col-span-4 p-4 sm:p-6 bg-slate-50/50 dark:bg-black/20 flex flex-col justify-between">
+                <div>
+                    <!-- Header del Panel de Eventos -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-clock-notification-badge text-winAccent-light dark:text-winAccent-dark"></i>
+                            <h3 class="font-semibold text-sm">Agenda del Día</h3>
+                        </div>
+                        <span id="selectedDayBadge" class="px-2 py-0.5 rounded-full text-xs bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 font-medium">
+                            --
+                        </span>
+                    </div>
+
+                    <!-- Formulario Rápido para Añadir Evento -->
+                    <form id="addEventForm" class="mb-4">
+                        <div class="flex flex-col gap-2">
+                            <input type="text" id="eventTitleInput" placeholder="Añadir un evento o recordatorio..." required
+                                class="w-full px-3 py-2 text-xs rounded-lg bg-white dark:bg-[#2c2c2c] border border-slate-300 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-winAccent-light dark:focus:ring-winAccent-dark transition-all placeholder:text-slate-400">
+                            
+                            <div class="flex gap-2">
+                                <input type="time" id="eventTimeInput" required
+                                    class="px-2 py-1.5 text-xs rounded-lg bg-white dark:bg-[#2c2c2c] border border-slate-300 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-winAccent-light dark:focus:ring-winAccent-dark text-slate-700 dark:text-slate-200">
+                                
+                                <button type="submit" class="flex-1 bg-winAccent-light dark:bg-winAccent-dark hover:bg-winAccent-hoverLight dark:hover:bg-winAccent-hoverDark text-white dark:text-slate-950 text-xs font-semibold py-1.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 active:scale-95">
+                                    <i class="fa-solid fa-plus"></i> Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Lista de Eventos -->
+                    <div class="space-y-2">
+                        <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Eventos programados</h4>
+                        <div id="eventsList" class="max-h-[260px] overflow-y-auto pr-1 space-y-2">
+                            <!-- Los eventos del día se inyectan dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer del Panel de Agenda -->
+                <div class="mt-4 pt-3 border-t border-slate-300/30 dark:border-white/10 text-center">
+                    <p class="text-[11px] text-slate-400 dark:text-slate-500">
+                        Los eventos se guardan automáticamente en tu navegador.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer-nav">
+    <button onclick="location.href='index.html'" class="btn-volver-index">
+        <img src="img/casa.png" alt="Inicio">
+        <span>Inicio</span>
+    </button>
+    <space>
+    <span class="copyright">© 2026 Proyecto-Web</span>
+    </space>
+</footer>
+    <!-- Script de Lógica del Calendario -->
+    <script>
+        // --- ESTADO GLOBAL Y CONFIGURACIÓN ---
+        const MONTH_NAMES = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        
+        const WEEKDAYS_FULL = [
+            'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
+        ];
+
+        let currentDate = new Date();
+        let selectedDate = new Date();
+        let currentView = 'days'; // 'days' | 'months'
+
+        // Almacenamiento local de eventos { 'YYYY-MM-DD': [ {id, title, time} ] }
+        let events = JSON.parse(localStorage.getItem('win11_calendar_events')) || {
+            // Eventos demo por defecto si está vacío
+            [formatDateKey(new Date())]: [
+                { id: 1, title: 'Reunión de equipo Fluent UI', time: '10:00' },
+                { id: 2, title: 'Revisión de diseño Win 11', time: '15:30' }
+            ]
+        };
+
+        // --- ELEMENTOS DEL DOM ---
+        const daysGrid = document.getElementById('daysGrid');
+        const monthYearLabel = document.getElementById('monthYearLabel');
+        const monthYearBtn = document.getElementById('monthYearBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const todayBtn = document.getElementById('todayBtn');
+        const calendarView = document.getElementById('calendarView');
+        const monthYearPicker = document.getElementById('monthYearPicker');
+        const fullSelectedDate = document.getElementById('fullSelectedDate');
+        const selectedDayBadge = document.getElementById('selectedDayBadge');
+        const eventsList = document.getElementById('eventsList');
+        const addEventForm = document.getElementById('addEventForm');
+        const eventTitleInput = document.getElementById('eventTitleInput');
+        const eventTimeInput = document.getElementById('eventTimeInput');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        const toggleAgendaBtn = document.getElementById('toggleAgendaBtn');
+        const agendaPanel = document.getElementById('agendaPanel');
+        const appContainer = document.getElementById('appContainer');
+
+        // --- FUNCIONES AUXILIARES ---
+        function formatDateKey(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function isSameDay(d1, d2) {
+            return d1.getFullYear() === d2.getFullYear() &&
+                   d1.getMonth() === d2.getMonth() &&
+                   d1.getDate() === d2.getDate();
+        }
+
+        function saveEvents() {
+            localStorage.setItem('win11_calendar_events', JSON.stringify(events));
+        }
+
+        // --- RENDERIZADO DEL CALENDARIO ---
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Actualizar etiqueta del encabezado
+            monthYearLabel.textContent = `${MONTH_NAMES[month]} ${year}`;
+
+            // Limpiar Grid de días
+            daysGrid.innerHTML = '';
+
+            // Primer día del mes
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            // Ajustar lunes como primer día (0: Lu, ..., 6: Do)
+            const adjustedFirstDay = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
+
+            // Total días del mes actual
+            const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+            // Total días del mes anterior
+            const prevMonthDays = new Date(year, month, 0).getDate();
+
+            // 1. Días del mes anterior (Relleno deshabilitado)
+            for (let i = adjustedFirstDay; i > 0; i--) {
+                const dayNum = prevMonthDays - i + 1;
+                const dayEl = createDayCell(dayNum, 'prev');
+                daysGrid.appendChild(dayEl);
+            }
+
+            // 2. Días del mes actual
+            const today = new Date();
+            for (let i = 1; i <= totalDaysInMonth; i++) {
+                const dateObj = new Date(year, month, i);
+                const isToday = isSameDay(dateObj, today);
+                const isSelected = isSameDay(dateObj, selectedDate);
+                const dateKey = formatDateKey(dateObj);
+                const hasEvent = events[dateKey] && events[dateKey].length > 0;
+
+                const dayEl = createDayCell(i, 'current', isToday, isSelected, hasEvent, dateObj);
+                daysGrid.appendChild(dayEl);
+            }
+
+            // 3. Días del mes posterior (Relleno deshabilitado)
+            const totalGridCells = daysGrid.children.length;
+            const remainingCells = (42 - totalGridCells) % 7; // Mantener estructura limpia (máx 6 filas)
+            const nextCellsToDraw = (remainingCells < 7 && totalGridCells < 35) ? (35 - totalGridCells) : (42 - totalGridCells);
+            
+            for (let i = 1; i <= nextCellsToDraw; i++) {
+                const dayEl = createDayCell(i, 'next');
+                daysGrid.appendChild(dayEl);
+            }
+
+            // Actualizar vista del pie e información
+            updateSelectedDateHeader();
+            renderEvents();
+        }
+
+        // Crear una celda individual para la cuadrícula
+        function createDayCell(dayNumber, type, isToday = false, isSelected = false, hasEvents = false, dateObj = null) {
+            const btn = document.createElement('button');
+            btn.className = `win-btn relative h-10 sm:h-11 rounded-lg text-xs sm:text-sm font-medium flex flex-col items-center justify-center transition-all cursor-pointer`;
+
+            if (type === 'current') {
+                if (isSelected) {
+                    // Estilo de Selección Windows 11 (Borde + Color de Acento)
+                    btn.classList.add(
+                        'bg-winAccent-light', 'dark:bg-winAccent-dark',
+                        'text-white', 'dark:text-slate-950',
+                        'font-bold', 'shadow-md', 'scale-105', 'z-10'
+                    );
+                } else if (isToday) {
+                    // Estilo Día Actual (Sin seleccionar)
+                    btn.classList.add(
+                        'border-2', 'border-winAccent-light', 'dark:border-winAccent-dark',
+                        'text-winAccent-light', 'dark:text-winAccent-dark', 'font-bold'
+                    );
+                } else {
+                    btn.classList.add('text-slate-800', 'dark:text-slate-100');
+                }
+
+                // Click listener para seleccionar día
+                btn.addEventListener('click', () => {
+                    selectedDate = dateObj;
+                    renderCalendar();
+                });
+
+                // Punto indicador si tiene eventos
+                if (hasEvents) {
+                    const dot = document.createElement('span');
+                    dot.className = `absolute bottom-1 w-1 h-1 rounded-full ${isSelected ? 'bg-white dark:bg-slate-900' : 'bg-winAccent-light dark:bg-winAccent-dark'}`;
+                    btn.appendChild(dot);
+                }
+
+            } else {
+                // Días opacos de meses anterior/posterior
+                btn.classList.add('text-slate-400/40', 'dark:text-slate-600/40', 'cursor-default');
+            }
+
+            const textSpan = document.createElement('span');
+            textSpan.textContent = dayNumber;
+            btn.appendChild(textSpan);
+
+            return btn;
+        }
+
+        // --- RENDERIZADO DE LA SELECTOR DE MESES ---
+        function renderMonthPicker() {
+            monthYearPicker.innerHTML = '';
+            const currentYear = currentDate.getFullYear();
+
+            MONTH_NAMES.forEach((name, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `win-btn py-3 rounded-lg text-xs font-semibold border border-slate-300/30 dark:border-white/10 ${
+                    idx === currentDate.getMonth() 
+                        ? 'bg-winAccent-light dark:bg-winAccent-dark text-white dark:text-slate-950' 
+                        : 'bg-white/40 dark:bg-white/5 hover:bg-black/5 dark:hover:bg-white/10'
+                }`;
+                btn.textContent = name.substring(0, 3);
+                
+                btn.addEventListener('click', () => {
+                    currentDate.setMonth(idx);
+                    toggleMonthPicker(false);
+                    renderCalendar();
+                });
+
+                monthYearPicker.appendChild(btn);
+            });
+        }
+
+        function toggleMonthPicker(show) {
+            if (show) {
+                currentView = 'months';
+                renderMonthPicker();
+                calendarView.classList.add('hidden');
+                monthYearPicker.classList.remove('hidden');
+            } else {
+                currentView = 'days';
+                monthYearPicker.classList.add('hidden');
+                calendarView.classList.remove('hidden');
+            }
+        }
+
+        // --- RENDERIZADO Y GESTIÓN DE EVENTOS ---
+        function updateSelectedDateHeader() {
+            const dayOfWeek = WEEKDAYS_FULL[selectedDate.getDay()];
+            const dayNum = selectedDate.getDate();
+            const monthName = MONTH_NAMES[selectedDate.getMonth()];
+            const year = selectedDate.getFullYear();
+
+            fullSelectedDate.textContent = `${dayOfWeek}, ${dayNum} de ${monthName}`;
+            selectedDayBadge.textContent = `${dayNum} ${monthName.substring(0,3)}`;
+        }
+
+        function renderEvents() {
+            eventsList.innerHTML = '';
+            const dateKey = formatDateKey(selectedDate);
+            const dayEvents = events[dateKey] || [];
+
+            if (dayEvents.length === 0) {
+                eventsList.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 dark:text-slate-500 text-xs">
+                        <i class="fa-regular fa-calendar-xmark text-2xl mb-2 opacity-50 block"></i>
+                        No hay eventos programados para este día.
+                    </div>
+                `;
+                return;
+            }
+
+            // Ordenar por hora
+            dayEvents.sort((a, b) => a.time.localeCompare(b.time));
+
+            dayEvents.forEach(evt => {
+                const item = document.createElement('div');
+                item.className = 'group flex items-center justify-between p-2.5 rounded-xl bg-white/70 dark:bg-[#2c2c2c]/80 border border-slate-200 dark:border-white/5 shadow-sm hover:border-winAccent-light dark:hover:border-winAccent-dark transition-all';
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-2.5 overflow-hidden">
+                        <div class="w-1 h-7 rounded-full bg-winAccent-light dark:bg-winAccent-dark shrink-0"></div>
+                        <div class="truncate">
+                            <h5 class="text-xs font-semibold text-slate-800 dark:text-slate-100 truncate">${escapeHtml(evt.title)}</h5>
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                <i class="fa-regular fa-clock"></i> ${evt.time}
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="deleteEvent(${evt.id})" title="Eliminar evento" 
+                        class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                `;
+                eventsList.appendChild(item);
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        // Añadir Evento
+        addEventForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = eventTitleInput.value.trim();
+            const time = eventTimeInput.value;
+
+            if (!title || !time) return;
+
+            const dateKey = formatDateKey(selectedDate);
+            if (!events[dateKey]) {
+                events[dateKey] = [];
+            }
+
+            events[dateKey].push({
+                id: Date.now(),
+                title: title,
+                time: time
+            });
+
+            saveEvents();
+            eventTitleInput.value = '';
+            eventTimeInput.value = '';
+            renderCalendar();
+        });
+
+        // Eliminar Evento (expuesto globalmente para el onclick en string)
+        window.deleteEvent = function(id) {
+            const dateKey = formatDateKey(selectedDate);
+            if (events[dateKey]) {
+                events[dateKey] = events[dateKey].filter(evt => evt.id !== id);
+                if (events[dateKey].length === 0) {
+                    delete events[dateKey];
+                }
+                saveEvents();
+                renderCalendar();
+            }
+        };
+
+        // --- NAVEGACIÓN Y EVENTOS DE USUARIO ---
+        prevBtn.addEventListener('click', () => {
+            if (currentView === 'days') {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+            } else {
+                currentDate.setFullYear(currentDate.getFullYear() - 1);
+            }
+            renderCalendar();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentView === 'days') {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            } else {
+                currentDate.setFullYear(currentDate.getFullYear() + 1);
+            }
+            renderCalendar();
+        });
+
+        todayBtn.addEventListener('click', () => {
+            currentDate = new Date();
+            selectedDate = new Date();
+            if (currentView === 'months') toggleMonthPicker(false);
+            renderCalendar();
+        });
+
+        monthYearBtn.addEventListener('click', () => {
+            toggleMonthPicker(currentView === 'days');
+        });
+
+        // --- CONMUTADOR DE TEMA (DARK / LIGHT MODE) ---
+        function setTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                themeIcon.className = 'fa-solid fa-moon text-amber-400';
+                themeLabel.textContent = 'Modo Oscuro';
+                appContainer.className = appContainer.className.replace('fluent-acrylic-light', 'fluent-acrylic-dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                themeIcon.className = 'fa-solid fa-sun text-amber-500';
+                themeLabel.textContent = 'Modo Claro';
+                appContainer.className = appContainer.className.replace('fluent-acrylic-dark', 'fluent-acrylic-light');
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            setTheme(!isDark);
+        });
+
+        // Toggle panel agenda para pantallas pequeñas
+        toggleAgendaBtn.addEventListener('click', () => {
+            agendaPanel.classList.toggle('hidden');
+        });
+
+        // --- INICIALIZACIÓN ---
+        window.onload = () => {
+            // Establecer hora actual por defecto en el input de tiempo
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            eventTimeInput.value = `${hours}:${minutes}`;
+
+            // Renderizar primera vista
+            renderCalendar();
+        };
+    </script>
+</body>
+</html>
