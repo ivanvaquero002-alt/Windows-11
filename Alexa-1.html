@@ -90,10 +90,27 @@
     </style>
   </head>
   <body>
-    <!-- Música de fondo -->
-        <audio autoplay loop>
-            <source src="Intermission-origin.mp3" type="audio/mpeg">
-        </audio>
+    <audio id="bgMusic" autoplay loop>
+    <source src="Intermission-origin.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const audio = document.getElementById('bgMusic');
+
+window.addEventListener('load', () => {
+    const time = localStorage.getItem('musicTime');
+
+    if (time) {
+        audio.currentTime = parseFloat(time);
+    }
+
+    audio.play().catch(() => {});
+});
+
+setInterval(() => {
+    localStorage.setItem('musicTime', audio.currentTime);
+}, 1000);
+</script>
     <main class="card">
       <div><img class="logo" src="Alexa.png" alt="Alexa Logo" /></div>
       <h1>Alexa web</h1>
@@ -105,7 +122,7 @@
     <script>
     setTimeout(function() {
         window.location.href = "https://alexa.amazon.com/userProfile?redirectTo=%2FuserProfile";
-    }, 1); // 10000 milisegundos = 10 segundos
+    }, 1); // 20000 milisegundos = 20 segundos
       //window.location.href = "https://alexa.amazon.com/userProfile?redirectTo=%2FuserProfile";
     </script>
   </body>
