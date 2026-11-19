@@ -51,10 +51,27 @@
     </style>
 </head>
 <body>
-    <!-- Música de fondo -->
-        <audio autoplay loop>
-            <source src="Intermission-origin.mp3" type="audio/mpeg">
-        </audio>
+   <audio id="bgMusic" autoplay loop>
+    <source src="Intermission-origin.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const audio = document.getElementById('bgMusic');
+
+window.addEventListener('load', () => {
+    const time = localStorage.getItem('musicTime');
+
+    if (time) {
+        audio.currentTime = parseFloat(time);
+    }
+
+    audio.play().catch(() => {});
+});
+
+setInterval(() => {
+    localStorage.setItem('musicTime', audio.currentTime);
+}, 1000);
+</script>
     <main class="app">
         <header class="titlebar">
             <div class="brand"><img src="img/carpeta-imagen.png" alt=""><span>Galería de fotos</span></div>
