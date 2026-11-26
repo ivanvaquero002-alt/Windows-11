@@ -232,26 +232,38 @@
         </style>
     </head>
     <body background="img/windows-11-morado-abstracto.avif">
-    <audio id="bgMusic" autoplay loop>
-    <source src="Electric Dreams (1) (1).mp3" type="audio/mpeg">
-  </audio>
-  <script>
-    const audio = document.getElementById('bgMusic');
-    
-    window.addEventListener('load', () => {
-      const time = localStorage.getItem('musicTime');
-    
-      if (time) {
-        audio.currentTime = parseFloat(time);
-      }
-    
-      audio.play().catch(() => {});
-    });
-    
-    setInterval(() => {
-      localStorage.setItem('musicTime', audio.currentTime);
-    }, 1000);
-  </script>
+    <audio id="bgMusic" loop>
+        <source src="Electric Dreams (1) (1).mp3" type="audio/mpeg">
+    </audio>
+        <script>
+        const audio = document.getElementById('bgMusic');
+        
+        window.addEventListener('load', () => {
+            const savedTime = localStorage.getItem('musicTime');
+        
+            audio.addEventListener('loadedmetadata', () => {
+                if (savedTime) {
+                    audio.currentTime = parseFloat(savedTime);
+                }
+        
+                audio.play().catch(error => {
+                    console.log('Autoplay bloqueado por el navegador:', error);
+                });
+            });
+        });
+        
+        // Guardar cada segundo
+        setInterval(() => {
+            if (!audio.paused) {
+                localStorage.setItem('musicTime', audio.currentTime);
+            }
+        }, 1000);
+        
+        // Guardar antes de salir
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('musicTime', audio.currentTime);
+        });
+        </script>
         <!-- Contenido -->
             <div class="contenido">
                 <h1>Proyecto Web</h1>
