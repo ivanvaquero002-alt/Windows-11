@@ -232,38 +232,16 @@
         </style>
     </head>
     <body background="img/windows-11-morado-abstracto.avif">
-    <audio id="bgMusic" loop>
-        <source src="Electric Dreams (1) (1).mp3" type="audio/mpeg">
-    </audio>
+        <audio id="bgMusic" loop>
+            <source src="Electric Dreams (1) (1).mp3" type="audio/mpeg">
+        </audio>
         <script>
-        const audio = document.getElementById('bgMusic');
-        
-        window.addEventListener('load', () => {
-            const savedTime = localStorage.getItem('musicTime');
-        
-            audio.addEventListener('loadedmetadata', () => {
-                if (savedTime) {
-                    audio.currentTime = parseFloat(savedTime);
-                }
-        
-                audio.play().catch(error => {
-                    console.log('Autoplay bloqueado por el navegador:', error);
-                });
-            });
-        });
-        
-        // Guardar cada segundo
-        setInterval(() => {
-            if (!audio.paused) {
-                localStorage.setItem('musicTime', audio.currentTime);
-            }
-        }, 1000);
-        
-        // Guardar antes de salir
-        window.addEventListener('beforeunload', () => {
-            localStorage.setItem('musicTime', audio.currentTime);
-        });
+        const audio = document.getElementById("bgMusic");
+        document.addEventListener("click", () => {
+            audio.play();
+        }, { once: true });
         </script>
+____________________________________________
         <!-- Contenido -->
             <div class="contenido">
                 <h1>Proyecto Web</h1>
