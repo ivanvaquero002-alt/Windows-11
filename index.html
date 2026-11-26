@@ -232,27 +232,59 @@
         </style>
     </head>
     <body background="img/windows-11-morado-abstracto.avif">
-       <audio id="bgMusic" autoplay loop>
-    <source src="Intermission-origin.mp3" type="audio/mpeg">
-</audio>
+       <audio id="bgMusic" autoplay></audio>
 
-<script>
-const audio = document.getElementById('bgMusic');
+  <script>
+    const audio = document.getElementById('bgMusic');
+    const canciones = [
+      "Intermission-origin.mp3",
+      "Electric Dreams (1) (1).mp3"
+    ];
 
-window.addEventListener('load', () => {
-    const time = localStorage.getItem('musicTime');
+    let indiceActual = parseInt(localStorage.getItem('musicTrack')) || 0;
+    if (indiceActual >= canciones.length) indiceActual = 0;
 
-    if (time) {
-        audio.currentTime = parseFloat(time);
+    function cargarCancion(indice, tiempoGuardado = 0) {
+      indiceActual = indice;
+      localStorage.setItem('musicTrack', indiceActual);
+      audio.src = canciones[indiceActual];
+
+      audio.addEventListener('loadedmetadata', function alCargarMeta() {
+        audio.removeEventListener('loadedmetadata', alCargarMeta);
+        if (tiempoGuardado > 0 && tiempoGuardado < audio.duration) {
+          audio.currentTime = tiempoGuardado;
+        }
+        audio.play().catch(() => {});
+      });
     }
 
-    audio.play().catch(() => {});
-});
+    // Inicia al cargar la página
+    window.addEventListener('load', () => {
+      const time = parseFloat(localStorage.getItem('musicTime')) || 0;
+      cargarCancion(indiceActual, time);
+    });
 
-setInterval(() => {
-    localStorage.setItem('musicTime', audio.currentTime);
-}, 1000);
-</script>
+    // Si el navegador bloquea el autoplay, arranca al primer clic del usuario
+    document.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    }, { once: true });
+
+    // Pasa a la siguiente canción en bucle infinito
+    audio.addEventListener('ended', () => {
+      const siguiente = (indiceActual + 1) % canciones.length;
+      localStorage.setItem('musicTime', 0);
+      cargarCancion(siguiente, 0);
+    });
+
+    // Guarda el segundo actual cada segundo
+    setInterval(() => {
+      if (!audio.paused) {
+        localStorage.setItem('musicTime', audio.currentTime);
+      }
+    }, 1000);
+  </script>
         <!-- Contenido -->
             <div class="contenido">
                 <h1>Proyecto Web</h1>
