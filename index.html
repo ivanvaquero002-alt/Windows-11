@@ -232,56 +232,90 @@
         </style>
     </head>
     <body background="img/windows-11-morado-abstracto.avif">
-       <audio id="bgMusic" autoplay></audio>
+      <audio id="bgMusic" preload="auto"></audio>
 
   <script>
     const audio = document.getElementById('bgMusic');
+
+    // Asegúrate de que estas rutas coincidan EXACTAMENTE con la ubicación real de los archivos
     const canciones = [
       "Intermission-origin.mp3",
       "Electric Dreams (1) (1).mp3"
     ];
 
-    let indiceActual = parseInt(localStorage.getItem('musicTrack')) || 0;
-    if (indiceActual >= canciones.length) indiceActual = 0;
-
-    function cargarCancion(indice, tiempoGuardado = 0) {
-      indiceActual = indice;
-      localStorage.setItem('musicTrack', indiceActual);
-      audio.src = canciones[indiceActual];
-
-      audio.addEventListener('loadedmetadata', function alCargarMeta() {
-        audio.removeEventListener('loadedmetadata', alCargarMeta);
-        if (tiempoGuardado > 0 && tiempoGuardado < audio.duration) {
-          audio.currentTime = tiempoGuardado;
-        }
-        audio.play().catch(() => {});
-      });
+    let indiceActual = parseInt(localStorage.getItem('musicTrack'), 10);
+    if (Number.isNaN(indiceActual) || indiceActual < 0 || indiceActual >= canciones.length) {
+      indiceActual = 0;
     }
 
-    // Inicia al cargar la página
-    window.addEventListener('load', () => {
-      const time = parseFloat(localStorage.getItem('musicTime')) || 0;
-      cargarCancion(indiceActual, time);
+    let tiempoPendiente = parseFloat(localStorage.getItem('musicTime')) || 0;
+    let yaAplicoTiempo = false;
+
+    function intentarReproducir() {
+      const promesa = audio.play();
+      if (promesa !== undefined) {
+        promesa.catch((err) => {
+          console.warn("Reproducción bloqueada hasta interacción del usuario:", err.name);
+        });
+      }
+    }
+
+    function cargarCancion(indice, tiempoGuardado = 0) {
+      indiceActual = indice % canciones.length;
+      tiempoPendiente = tiempoGuardado > 0 ? tiempoGuardado : 0;
+      yaAplicoTiempo = false;
+
+      localStorage.setItem('musicTrack', indiceActual);
+      localStorage.setItem('musicTime', tiempoPendiente);
+
+      audio.pause();
+      audio.src = canciones[indiceActual];
+      audio.load();
+    }
+
+    // Cuando ya hay datos suficientes para reproducir sin trabarse
+    audio.addEventListener('canplay', () => {
+      if (!yaAplicoTiempo && tiempoPendiente > 0 && isFinite(audio.duration) && tiempoPendiente < audio.duration) {
+        yaAplicoTiempo = true;
+        audio.currentTime = tiempoPendiente;
+      }
+      intentarReproducir();
     });
 
-    // Si el navegador bloquea el autoplay, arranca al primer clic del usuario
-    document.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play().catch(() => {});
-      }
-    }, { once: true });
+    // Si hay error cargando el archivo (404, ruta mal escrita, archivo corrupto, etc.)
+    audio.addEventListener('error', () => {
+      const err = audio.error;
+      console.error("Error de audio con:", audio.currentSrc, "Código:", err ? err.code : "desconocido");
+    });
 
-    // Pasa a la siguiente canción en bucle infinito
+    // Al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      cargarCancion(indiceActual, tiempoPendiente);
+    });
+
+    // Desbloqueo en el primer clic o pulsación de tecla
+    ['click', 'keydown', 'touchstart'].forEach((evento) => {
+      document.addEventListener(evento, () => {
+        if (audio.paused) {
+          if (!audio.src) {
+            cargarCancion(indiceActual, tiempoPendiente);
+          } else {
+            intentarReproducir();
+          }
+        }
+      }, { once: true });
+    });
+
+    // Pasar a la siguiente canción en bucle infinito
     audio.addEventListener('ended', () => {
       const siguiente = (indiceActual + 1) % canciones.length;
-      localStorage.setItem('musicTime', 0);
       cargarCancion(siguiente, 0);
     });
 
-    // Guarda el segundo actual cada segundo
+    // Guardar progreso cada segundo solo si está sonando
     setInterval(() => {
-      if (!audio.paused) {
-        localStorage.setItem('musicTime', audio.currentTime);
+      if (!audio.paused && !audio.ended && isFinite(audio.currentTime)) {
+        localStorage.setItem('musicTime', audio.currentTime.toFixed(2));
       }
     }, 1000);
   </script>
